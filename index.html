@@ -46,6 +46,7 @@ body{
 }
 canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 #sky{z-index:0}
+#fw{z-index:1}
 #fx{z-index:6}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 button:focus-visible{outline:2px solid var(--rose-l);outline-offset:4px}
@@ -172,10 +173,19 @@ button:focus-visible{outline:2px solid var(--rose-l);outline-offset:4px}
 #done{position:absolute;left:50%;top:12px;transform:translateX(-50%);visibility:hidden;opacity:0;white-space:nowrap}
 
 /* ---------- Cảnh 6: kết ---------- */
-.love{font-family:var(--hand);font-weight:700;font-size:54px;line-height:1.15;text-align:center;
-  text-shadow:0 0 24px rgba(217,72,95,.55),0 2px 4px rgba(0,0,0,.4);opacity:0}
-.love .h{display:inline-block}
-.row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
+#s6{display:block;padding:0}
+.bloom{position:absolute;left:50%;top:42%;width:140vmax;height:140vmax;margin:-70vmax 0 0 -70vmax;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,198,140,.34),rgba(196,74,100,.2) 36%,rgba(27,20,36,0) 72%);
+  opacity:0;pointer-events:none;will-change:transform,opacity}
+.love-wrap{position:absolute;left:0;right:0;top:42%;transform:translateY(-50%);text-align:center}
+.love,.love-glow{font-family:var(--hand);font-weight:700;font-size:46px;line-height:1.2;white-space:nowrap}
+.love{position:relative;color:#fff4e4;text-shadow:0 2px 6px rgba(60,10,25,.6)}
+.love-glow{position:absolute;left:0;right:0;top:0;color:transparent;opacity:0;
+  text-shadow:0 0 14px rgba(255,214,160,.95),0 0 38px rgba(240,120,120,.8),0 0 80px rgba(220,70,100,.55)}
+.love .lc{display:inline-block;opacity:0;will-change:transform,opacity}
+.love-sub{position:absolute;left:0;right:0;top:calc(42% + 192px);text-align:center;font-style:italic;font-size:15px;
+  letter-spacing:.06em;color:#f3d29e;font-variant-numeric:lining-nums;visibility:hidden;opacity:0}
+.row{position:absolute;left:16px;right:16px;bottom:calc(36px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
 .row .btn{visibility:hidden;opacity:0}
 
 /* ---------- nút nhạc ---------- */
@@ -192,6 +202,7 @@ button:focus-visible{outline:2px solid var(--rose-l);outline-offset:4px}
 </head>
 <body>
 <canvas id="sky"></canvas>
+<canvas id="fw"></canvas>
 
 <section class="scene" id="s1" aria-label="Phong bì">
   <h1 class="title" id="tIntro"></h1>
@@ -253,7 +264,9 @@ button:focus-visible{outline:2px solid var(--rose-l);outline-offset:4px}
 </section>
 
 <section class="scene" id="s6" aria-label="Lời kết">
-  <p class="love" id="love"></p>
+  <div class="bloom" aria-hidden="true"></div>
+  <div class="love-wrap"><p class="love-glow" id="loveGlow" aria-hidden="true"></p><p class="love" id="love"></p></div>
+  <p class="love-sub" id="loveSub"></p>
   <div class="row"><button class="btn ghost" id="reread"></button><button class="btn" id="restart"></button></div>
 </section>
 
@@ -311,6 +324,7 @@ const CONTENT = {
   done: 'Đọc xong rồi',
 
   love: 'Yêu Vợ iuuu',
+  loveSub: '23.07.2026 – 23.11.2026',
   reread: 'Đọc lại thư',
   restart: 'Mở lại từ đầu'
 };
@@ -343,10 +357,6 @@ txt('#h5', CONTENT.writeHint);
 txt('#done', CONTENT.done);
 txt('#reread', CONTENT.reread);
 txt('#restart', CONTENT.restart);
-$('#love').innerHTML = '';
-$('#love').append(CONTENT.love + ' ');
-const heartSpan = document.createElement('span'); heartSpan.className = 'h'; heartSpan.textContent = '❤️';
-$('#love').append(heartSpan);
 
 /* dấu sáp: viền gợn không đều */
 (() => {
@@ -381,14 +391,18 @@ CONTENT.cards.forEach(c => {
 const cards = [...track.children], dots = [...dotsEl.children];
 
 /* =====================================================================
-   HẠT: bụi sao + pháo hoa trái tim (canvas sau), cánh hoa (canvas trước)
+   HẠT — theo skill canvas-generative: pool cố định (không cấp phát trong
+   vòng lặp), vệt sáng bằng xoá mờ dần, bụi vàng trôi theo flow field.
+   #sky: bụi sao | #fw: pháo hoa + trái tim ánh sáng | #fx: cánh hoa
    ===================================================================== */
 const FX = (() => {
-  const back = $('#sky'), front = $('#fx');
-  const bc = back.getContext('2d'), fc = front.getContext('2d');
+  const back = $('#sky'), mid = $('#fw'), front = $('#fx');
+  const bc = back.getContext('2d'), mc = mid.getContext('2d'), fc = front.getContext('2d');
   const DPR = Math.min(window.devicePixelRatio || 1, 1.75);
-  let W = 0, H = 0, t = 0, stars = [], petals = [], sparks = [], rockets = [];
-  let ambient = false, fwUntil = 0, fwNext = 0, frontDirty = false;
+  let W = 0, H = 0, t = 0, stars = [], petals = [];
+  let ambient = false, frontDirty = false, midDirty = false;
+  let fwOn = false, fwFastUntil = 0, fwNext = 0, onBurst = null;
+  const heart = { on: false, cx: 0, cy: 0, s: 10, beat: 1 };
 
   const mk = (w, h, draw) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d')); return c; };
   const glow = (col) => mk(32, 32, g => {
@@ -397,7 +411,15 @@ const FX = (() => {
     g.fillStyle = r; g.fillRect(0, 0, 32, 32);
   });
   const starSpr = glow('rgba(246,222,186,.85)');
-  const fwSpr = [glow('rgba(246,214,168,.9)'), glow('rgba(231,154,144,.9)'), glow('rgba(217,72,95,.9)')];
+  const GOLD = glow('rgba(255,206,130,.95)'), CREAM = glow('rgba(255,236,212,.95)'),
+        ROSE = glow('rgba(244,150,150,.95)'), RED = glow('rgba(236,72,98,.95)');
+  const SPR = [GOLD, CREAM, ROSE, RED, GOLD];
+  const pick = () => SPR[(Math.random() * SPR.length) | 0];
+  const FLASH = mk(128, 128, g => {
+    const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    r.addColorStop(0, 'rgba(255,248,235,.9)'); r.addColorStop(.25, 'rgba(255,200,150,.45)'); r.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = r; g.fillRect(0, 0, 128, 128);
+  });
   const petalSpr = [['#ecc0b2', '#b9706a'], ['#cf8a80', '#8e3442'], ['#dda092', '#6e1f2e']].map(([a, b]) => mk(44, 26, g => {
     const gr = g.createLinearGradient(0, 0, 44, 26); gr.addColorStop(0, a); gr.addColorStop(1, b);
     g.fillStyle = gr; g.beginPath(); g.moveTo(3, 13); g.bezierCurveTo(10, 1, 30, 0, 38, 5);
@@ -406,60 +428,150 @@ const FX = (() => {
   }));
   const rnd = (a, b) => a + Math.random() * (b - a);
 
+  /* pool hạt: cấp phát một lần, hạt chết thì đổi chỗ với hạt cuối */
+  const POOL = 1600, pool = new Array(POOL);
+  for (let i = 0; i < POOL; i++) pool[i] = { k: 0, x: 0, y: 0, vx: 0, vy: 0, life: 0, max: 1, size: 1, spr: null, tx: 0, ty: 0, delay: 0, ph: 0, drag: 1, g: 0, glit: 0 };
+  let alive = 0;
+  const take = () => (alive < POOL ? pool[alive++] : null);
+  const ROCKET = 1, SPARK = 2, FLASHK = 3, HEART = 4, COMET = 5, DUST = 6;
+  const hx = a => { const s = Math.sin(a); return 16 * s * s * s; };
+  const hy = a => -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
+
+  function spark(x, y, vx, vy, max, size, spr, drag, g, glit) {
+    const p = take(); if (!p) return;
+    p.k = SPARK; p.x = x; p.y = y; p.vx = vx; p.vy = vy; p.life = 0; p.max = max; p.size = size; p.spr = spr; p.drag = drag; p.g = g; p.glit = glit;
+  }
+  function explode(x, y) {
+    const f = take();
+    if (f) { f.k = FLASHK; f.x = x; f.y = y; f.life = 0; f.max = .35; f.size = rnd(110, 170); }
+    const kind = Math.random();
+    if (kind < .4) {                       // trái tim hai lớp
+      const k = rnd(9, 12), a = pick(), b = pick();
+      for (let i = 0; i < 60; i++) { const th = i / 60 * 6.2832; spark(x, y, hx(th) * k, hy(th) * k, rnd(1.4, 1.9), rnd(6, 9), a, .5, 26, .3); }
+      for (let i = 0; i < 28; i++) { const th = i / 28 * 6.2832; spark(x, y, hx(th) * k * .55, hy(th) * k * .55, rnd(1.2, 1.6), rnd(5, 7), b, .5, 26, .3); }
+    } else if (kind < .75) {               // mẫu đơn, cuối đời lấp lánh
+      const spr = pick();
+      for (let i = 0; i < 80; i++) { const th = rnd(0, 6.2832), sp = rnd(60, 240); spark(x, y, Math.cos(th) * sp, Math.sin(th) * sp, rnd(1.3, 2.1), rnd(5, 8), spr, .45, 40, .5); }
+    } else {                               // liễu vàng rủ xuống
+      for (let i = 0; i < 70; i++) { const th = rnd(0, 6.2832), sp = rnd(80, 200); spark(x, y, Math.cos(th) * sp, Math.sin(th) * sp - 30, rnd(2.4, 3.2), rnd(4, 6), GOLD, .55, 55, .25); }
+    }
+    if (onBurst) onBurst();
+  }
+  function launch() {
+    const p = take(); if (!p) return;
+    const ty = H * rnd(.08, .3), dur = rnd(.85, 1.1);
+    p.k = ROCKET; p.x = W * rnd(.12, .88); p.y = H + 10; p.vx = rnd(-18, 18); p.vy = -(H + 10 - ty) / dur; p.ty = ty;
+  }
+  function heartScale() { return Math.min(W * .96 / 32, 13); }
+  function formHeart(cx, cy) {
+    heart.on = true; heart.cx = cx; heart.cy = cy; heart.s = heartScale();
+    const n = W < 500 ? 220 : 290;
+    for (let i = 0; i < n; i++) {
+      const p = take(); if (!p) break;
+      const th = i / n * 6.2832;
+      p.k = HEART; p.tx = hx(th) + rnd(-.4, .4); p.ty = hy(th) - 2.5 + rnd(-.4, .4);
+      p.x = cx + rnd(-W * .6, W * .6); p.y = H + rnd(10, 160); p.life = 0; p.delay = rnd(0, .9) + i / n * .5;
+      p.size = rnd(3, 6.5); p.spr = Math.random() < .6 ? GOLD : (Math.random() < .5 ? ROSE : CREAM); p.ph = rnd(0, 6.28);
+    }
+    for (let c = 0; c < 2; c++) { const p = take(); if (!p) break; p.k = COMET; p.ph = c * Math.PI; p.vx = c ? -1 : 1; p.delay = 2.4; p.life = 0; }
+    for (let i = 0; i < 70; i++) {
+      const p = take(); if (!p) break;
+      p.k = DUST; p.x = rnd(0, W); p.y = rnd(0, H); p.vx = 0; p.vy = 0; p.size = rnd(2, 4.5); p.ph = rnd(0, 6.28); p.life = 0; p.delay = rnd(0, 2.5);
+    }
+  }
+
   function resize() {
     W = innerWidth; H = innerHeight;
-    for (const c of [back, front]) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); }
+    for (const c of [back, mid, front]) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); }
     const n = Math.min(150, Math.round(W * H / 2400));
     stars = Array.from({ length: n }, () => ({
       x: Math.random() * W, y: Math.random() * H,
       r: Math.random() < .12 ? rnd(1.6, 2.8) : rnd(.5, 1.4),
       a: rnd(.3, .9), s: rnd(.6, 2.2), p: rnd(0, 6.28)
     }));
-    if (RM) drawBack(0);
+    midDirty = true;
+    if (RM) drawBack();
   }
 
-  function heartBurst(x, y) {
-    const n = 52, k = rnd(10, 13), main = fwSpr[(Math.random() * 3) | 0], inner = fwSpr[(Math.random() * 3) | 0];
-    for (let ring = 0; ring < 2; ring++) {
-      const sc = ring ? k * .5 : k, cnt = ring ? 24 : n;
-      for (let i = 0; i < cnt; i++) {
-        const a = i / cnt * Math.PI * 2, s = Math.sin(a);
-        const hx = 16 * s * s * s, hy = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
-        sparks.push({ x, y, vx: hx * sc, vy: hy * sc, life: 1, decay: rnd(.5, .7), size: ring ? rnd(6, 8) : rnd(7, 11), spr: ring ? inner : main });
-      }
-    }
-  }
-  function launch() {
-    const x = W * rnd(.18, .82), ty = H * rnd(.12, .38), dur = rnd(.8, 1.05);
-    rockets.push({ x, y: H + 10, vx: rnd(-14, 14), vy: -(H + 10 - ty) / dur, ty });
-  }
-
-  function drawBack(dt) {
+  function drawBack() {
     bc.setTransform(DPR, 0, 0, DPR, 0, 0);
     bc.clearRect(0, 0, W, H);
     for (const s of stars) {
       bc.globalAlpha = RM ? s.a : s.a * (.55 + .45 * Math.sin(t * s.s + s.p));
       const d = s.r * 6; bc.drawImage(starSpr, s.x - d / 2, s.y - d / 2, d, d);
     }
-    if (t < fwUntil && t >= fwNext) { launch(); fwNext = t + rnd(.45, 1); }
-    if (rockets.length || sparks.length) {
-      bc.globalCompositeOperation = 'lighter';
-      for (let i = rockets.length - 1; i >= 0; i--) {
-        const r = rockets[i]; r.x += r.vx * dt; r.y += r.vy * dt;
-        bc.globalAlpha = .9; bc.drawImage(fwSpr[0], r.x - 6, r.y - 6, 12, 12);
-        bc.globalAlpha = .35; bc.drawImage(fwSpr[0], r.x - 4, r.y + 8, 8, 8);
-        if (r.y <= r.ty) { heartBurst(r.x, r.y); rockets.splice(i, 1); }
-      }
-      const drag = Math.pow(.35, dt);
-      for (let i = sparks.length - 1; i >= 0; i--) {
-        const p = sparks[i];
-        p.vx *= drag; p.vy = p.vy * drag + 38 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt * p.decay;
-        if (p.life <= 0) { sparks[i] = sparks[sparks.length - 1]; sparks.pop(); continue; }
-        bc.globalAlpha = p.life; bc.drawImage(p.spr, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-      }
-      bc.globalCompositeOperation = 'source-over';
-    }
     bc.globalAlpha = 1;
+  }
+
+  function drawMid(dt) {
+    if (!alive && !fwOn) {
+      if (midDirty) { mc.setTransform(1, 0, 0, 1, 0, 0); mc.clearRect(0, 0, mid.width, mid.height); midDirty = false; }
+      return;
+    }
+    midDirty = true;
+    mc.setTransform(DPR, 0, 0, DPR, 0, 0);
+    // xoá mờ dần thay cho clearRect -> để lại vệt sáng
+    mc.globalCompositeOperation = 'destination-out';
+    mc.globalAlpha = 1 - Math.pow(.72, dt * 60);
+    mc.fillStyle = '#000'; mc.fillRect(0, 0, W, H);
+    mc.globalCompositeOperation = 'lighter';
+    if (fwOn && t >= fwNext) {
+      launch(); if (t < fwFastUntil && Math.random() < .35) launch();
+      fwNext = t + (t < fwFastUntil ? rnd(.45, .95) : rnd(2.2, 3.6));
+    }
+    const S = heart.s * heart.beat;
+    for (let i = alive - 1; i >= 0; i--) {
+      const p = pool[i];
+      let dead = false;
+      if (p.k === ROCKET) {
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        mc.globalAlpha = 1; mc.drawImage(CREAM, p.x - 5, p.y - 5, 10, 10);
+        if (p.y <= p.ty) { const ex = p.x, ey = p.y; pool[i] = pool[--alive]; pool[alive] = p; explode(ex, ey); continue; }
+      } else if (p.k === SPARK) {
+        p.life += dt; const u = p.life / p.max;
+        if (u >= 1) dead = true;
+        else {
+          const dr = Math.pow(p.drag, dt);
+          p.vx *= dr; p.vy = p.vy * dr + p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+          let a = 1 - u * u; if (u > .55 && Math.random() < p.glit) a *= .15;
+          const s = p.size * (1 - u * .4);
+          mc.globalAlpha = a; mc.drawImage(p.spr, p.x - s / 2, p.y - s / 2, s, s);
+        }
+      } else if (p.k === FLASHK) {
+        p.life += dt; const u = p.life / p.max;
+        if (u >= 1) dead = true;
+        else { const s = p.size * (.6 + u * .6); mc.globalAlpha = (1 - u) * .6; mc.drawImage(FLASH, p.x - s / 2, p.y - s / 2, s, s); }
+      } else if (!heart.on) {
+        dead = true;
+      } else {
+        p.life += dt;
+        if (p.life >= p.delay) {
+          const fade = Math.min(1, p.life - p.delay);
+          if (p.k === HEART) {
+            const k = Math.min(1, dt * 2.6);
+            p.x += (heart.cx + p.tx * S - p.x) * k; p.y += (heart.cy + p.ty * S - p.y) * k;
+            mc.globalAlpha = .55 + .45 * Math.sin(t * 3.2 + p.ph);
+            mc.drawImage(p.spr, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+          } else if (p.k === COMET) {
+            p.ph += p.vx * dt * 1.1;
+            p.x = heart.cx + hx(p.ph) * S; p.y = heart.cy + (hy(p.ph) - 2.5) * S;
+            mc.globalAlpha = fade; mc.drawImage(CREAM, p.x - 8, p.y - 8, 16, 16);
+          } else {
+            // flow field: góc lái lấy từ trường nhiễu sin/cos đổi dần theo thời gian
+            const ang = Math.sin(p.x * .006 + t * .25) * 2.2 + Math.cos(p.y * .007 - t * .18) * 2.2;
+            const dr = Math.pow(.6, dt);
+            p.vx = (p.vx + Math.cos(ang) * 14 * dt) * dr; p.vy = (p.vy + Math.sin(ang) * 14 * dt - 4 * dt) * dr;
+            p.x += p.vx * dt; p.y += p.vy * dt;
+            if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10;
+            if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10;
+            mc.globalAlpha = fade * (.3 + .7 * Math.abs(Math.sin(t * 1.7 + p.ph)));
+            mc.drawImage(GOLD, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+          }
+        }
+      }
+      if (dead) { pool[i] = pool[--alive]; pool[alive] = p; }
+    }
+    mc.globalCompositeOperation = 'source-over'; mc.globalAlpha = 1;
   }
 
   function addPetal(x, y, vx, vy) {
@@ -491,7 +603,7 @@ const FX = (() => {
   let last = 0;
   function loop(now) {
     const dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now; t += dt;
-    drawBack(dt); drawFront(dt);
+    drawBack(); drawMid(dt); drawFront(dt);
     requestAnimationFrame(loop);
   }
   resize();
@@ -504,51 +616,120 @@ const FX = (() => {
       for (let i = 0; i < n; i++) { const a = rnd(0, 6.28), sp = rnd(140, 380); addPetal(x, y, Math.cos(a) * sp, Math.sin(a) * sp - 140); }
     },
     ambient(on) { ambient = on && !RM; },
-    fireworks(sec) { if (RM) return; fwUntil = t + sec; fwNext = t; },
-    stopFireworks() { fwUntil = 0; rockets.length = 0; sparks.length = 0; }
+    fireworks(on) { if (RM) return; fwOn = on; if (on) { fwFastUntil = t + 12; fwNext = t + .5; launch(); launch(); } },
+    heart(cx, cy) { if (!RM) formHeart(cx, cy); },
+    moveHeart(cx, cy) { heart.cx = cx; heart.cy = cy; heart.s = heartScale(); },
+    heartState: heart,
+    onBurst(fn) { onBurst = fn; },
+    stopEnd() { fwOn = false; heart.on = false; heart.beat = 1; alive = 0; }
   };
 })();
 
 /* =====================================================================
-   NHẠC: hộp nhạc tự soạn bằng Web Audio (không dùng file, không bản quyền)
+   NHẠC: "Valse mùa thu" — piano chậm nhịp 3/4 tự soạn (không bản quyền),
+   tổng hợp bằng Web Audio. Cảnh cuối thêm đệm dây, chuông celesta và
+   tiếng lấp lánh theo từng chùm pháo hoa.
    ===================================================================== */
 const Music = (() => {
-  let ctx = null, master = null, wet = null, on = true, timer = 0, t0 = 0, idx = 0, loopN = 0;
-  const B = 60 / 76;
-  const MEL = [[76,1],[79,1],[84,1],[79,1], [81,1.5],[79,.5],[76,2], [77,1],[81,1],[84,1],[81,1], [83,1.5],[81,.5],[79,2],
-               [76,1],[79,1],[84,1],[88,1], [86,1.5],[84,.5],[81,2], [81,1],[84,1],[77,1],[81,1], [79,2],[74,1],[71,1]];
-  const CH = [[60,4],[57,3],[53,4],[55,4],[60,4],[57,3],[53,4],[55,4]];
-  const EV = []; let b = 0;
-  for (const [m, l] of MEL) { EV.push({ b, m, v: .15, d: 2.6 }); b += l; }
-  CH.forEach(([r, third], i) => [0, 7, 12, 12 + third].forEach((iv, k) => EV.push({ b: i * 4 + k, m: r + iv - 12, v: .05, d: 2 })));
-  EV.sort((x, y) => x.b - y.b);
-  const LOOP = b + 2;
-  const f = m => 440 * Math.pow(2, (m - 69) / 12);
+  let ctx = null, master = null, wet = null, on = true, nextBar = 0, bar = 0, finale = false, noiseBuf = null, lastSpark = 0;
+  const BEAT = 60 / 66, BAR = BEAT * 3;
+  // mỗi ô nhịp: [nốt bass, [hợp âm], [[nốt giai điệu (0 = lặng), số phách], ...]]  — Fa trưởng
+  const SONG = [
+    [41, [57, 60, 64], [[0, 1], [72, 1], [76, 1]]],          // Fmaj7
+    [45, [55, 60, 64], [[79, 2], [76, 1]]],                  // Am7
+    [46, [57, 62, 65], [[77, 1.5], [74, .5], [72, 1]]],      // Bbmaj7
+    [48, [58, 65, 67], [[74, 3]]],                           // C7sus4
+    [41, [57, 60, 64], [[0, 1], [72, 1], [76, 1]]],          // Fmaj7
+    [38, [57, 60, 65], [[81, 2], [79, 1]]],                  // Dm7
+    [43, [58, 62, 65], [[77, 1], [74, 1], [70, 1]]],         // Gm7
+    [48, [58, 64, 67], [[76, 3]]],                           // C7
+    [46, [57, 62, 65], [[0, 1], [74, 1], [77, 1]]],          // Bbmaj7
+    [45, [55, 60, 64], [[79, 1.5], [77, .5], [76, 1]]],      // Am7
+    [43, [58, 62, 65], [[74, 1], [70, 1], [74, 1]]],         // Gm7
+    [45, [57, 60, 64], [[72, 3]]],                           // F/A
+    [46, [57, 62, 65], [[0, 1], [77, 1], [81, 1]]],          // Bbmaj7
+    [48, [58, 65, 67], [[84, 2], [82, 1]]],                  // C7sus4
+    [48, [58, 64, 67], [[81, 1.5], [79, .5], [76, 1]]],      // C7
+    [41, [57, 60, 67], [[77, 3]]]                            // Fadd9
+  ];
+  const PARTS = [[1, 1], [2, .42], [3, .16], [4, .07], [5, .03]];
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const rnd = (a, b) => a + Math.random() * (b - a);
 
-  function note(m, t, v, d) {
-    const g = ctx.createGain(), o = ctx.createOscillator(), o2 = ctx.createOscillator(), g2 = ctx.createGain();
-    o.type = 'sine'; o.frequency.value = f(m);
-    o2.type = 'sine'; o2.frequency.value = f(m) * 3.01;
-    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d);
-    g2.gain.setValueAtTime(.3, t); g2.gain.exponentialRampToValueAtTime(.001, t + .45);
-    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master); g.connect(wet);
-    o.start(t); o2.start(t); o.stop(t + d + .05); o2.stop(t + .5);
+  function route(node, pan, send) {
+    let n = node;
+    if (ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = pan || 0; node.connect(p); n = p; }
+    n.connect(master);
+    if (send) { const g = ctx.createGain(); g.gain.value = send; n.connect(g); g.connect(wet); }
+  }
+  function piano(m, t, v, pan) {
+    const f = hz(m), tau = Math.max(.45, 2.4 * Math.pow(.5, (m - 48) / 22)), end = t + .35 + tau * 5;
+    const out = ctx.createGain();
+    out.gain.setValueAtTime(0, t);
+    out.gain.linearRampToValueAtTime(v, t + .006);
+    out.gain.setTargetAtTime(v * .42, t + .006, .14);
+    out.gain.setTargetAtTime(0, t + .35, tau);
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = .4;
+    lp.frequency.setValueAtTime(Math.min(15000, f * 10), t);
+    lp.frequency.setTargetAtTime(Math.min(9000, f * 3.2), t, .45);
+    lp.connect(out);
+    for (const [n, a] of PARTS) {
+      if (f * n > 15000) break;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = f * n * Math.sqrt(1 + .00035 * n * n);
+      g.gain.value = a; o.connect(g); g.connect(lp); o.start(t); o.stop(end);
+    }
+    const ns = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), ng = ctx.createGain();
+    ns.buffer = noiseBuf; bp.type = 'bandpass'; bp.frequency.value = Math.min(7000, f * 5); bp.Q.value = .9;
+    ng.gain.setValueAtTime(v * .3, t); ng.gain.exponentialRampToValueAtTime(.0001, t + .035);
+    ns.connect(bp); bp.connect(ng); ng.connect(out); ns.start(t); ns.stop(t + .05);
+    route(out, pan, .32);
+  }
+  function celesta(m, t, v, pan) {
+    const f = hz(m), out = ctx.createGain();
+    out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(v, t + .003); out.gain.setTargetAtTime(0, t + .01, .38);
+    const o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o1.frequency.value = f; o2.frequency.value = f * 4.02; g2.gain.value = .22;
+    o1.connect(out); o2.connect(g2); g2.connect(out);
+    o1.start(t); o2.start(t); o1.stop(t + 2.4); o2.stop(t + 1.2);
+    route(out, pan, .6);
+  }
+  function pad(notes, t, dur) {
+    const out = ctx.createGain(), lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 1100; lp.Q.value = .6; lp.connect(out);
+    out.gain.setValueAtTime(0, t); out.gain.linearRampToValueAtTime(.022, t + 1.1); out.gain.setTargetAtTime(0, t + dur - .3, .5);
+    for (const m of notes) for (const d of [-7, 7]) {
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz(m); o.detune.value = d;
+      o.connect(lp); o.start(t); o.stop(t + dur + 2.5);
+    }
+    route(out, 0, .7);
+  }
+  function scheduleBar(i, t) {
+    const [bass, chord, mel] = SONG[i];
+    piano(bass, t, .2, -.25);
+    chord.forEach((m, k) => piano(m, t + BEAT + k * .014, .075, -.12 + k * .1));
+    let b = 0;
+    for (const [m, l] of mel) {
+      if (m) { piano(m, t + b * BEAT, .25, .12); if (finale) piano(m + 12, t + b * BEAT + .012, .07, .3); }
+      b += l;
+    }
+    if (finale) {
+      pad(chord.map(x => x + 12), t, BAR + .5);
+      const arp = [chord[0] + 24, chord[1] + 24, chord[2] + 24, chord[0] + 36, chord[2] + 24, chord[1] + 24];
+      arp.forEach((m, k) => celesta(m, t + k * BEAT / 2, .045, rnd(-.5, .5)));
+    }
   }
   function tick() {
-    if (!ctx) return;
-    const ahead = ctx.currentTime + .4;
-    for (;;) {
-      const e = EV[idx], time = t0 + (loopN * LOOP + e.b) * B;
-      if (time > ahead) break;
-      if (time > ctx.currentTime - .05) note(e.m, time, e.v, e.d);
-      if (++idx >= EV.length) { idx = 0; loopN++; }
-    }
+    if (!ctx || ctx.state !== 'running') return;
+    if (nextBar < ctx.currentTime - .1) nextBar = ctx.currentTime + .05;
+    while (nextBar < ctx.currentTime + .6) { scheduleBar(bar, nextBar); nextBar += BAR; bar = (bar + 1) % SONG.length; }
   }
   function impulse(sec) {
     const len = Math.floor(ctx.sampleRate * sec), buf = ctx.createBuffer(2, len, ctx.sampleRate);
     for (let ch = 0; ch < 2; ch++) { const dd = buf.getChannelData(ch); for (let i = 0; i < len; i++) dd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
     return buf;
   }
+  const level = () => (finale ? .9 : .75);
   function start() {
     if (ctx) { if (on) ctx.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -556,29 +737,41 @@ const Music = (() => {
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     try {
       ctx = new AC();
-      const comp = ctx.createDynamicsCompressor(); comp.connect(ctx.destination);
+      const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 3; comp.connect(ctx.destination);
       master = ctx.createGain(); master.gain.value = 0; master.connect(comp);
-      const conv = ctx.createConvolver(); conv.buffer = impulse(2.4);
-      wet = ctx.createGain(); wet.gain.value = .35; wet.connect(conv); conv.connect(master);
+      const conv = ctx.createConvolver(); conv.buffer = impulse(3.2);
+      wet = ctx.createGain(); wet.connect(conv); conv.connect(master);
+      noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .05), ctx.sampleRate);
+      const nd = noiseBuf.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
       const sb = ctx.createBufferSource(); sb.buffer = ctx.createBuffer(1, 1, 22050); sb.connect(ctx.destination); sb.start(0);
       if (ctx.resume) ctx.resume();
-      t0 = ctx.currentTime + .2;
-      master.gain.setValueAtTime(0, ctx.currentTime); master.gain.linearRampToValueAtTime(.9, ctx.currentTime + 2.5);
-      timer = setInterval(tick, 90); tick();
+      nextBar = ctx.currentTime + .25; bar = 0;
+      master.gain.setValueAtTime(0, ctx.currentTime); master.gain.linearRampToValueAtTime(level(), ctx.currentTime + 2.5);
+      setInterval(tick, 120); tick();
     } catch (e) { ctx = null; }
   }
   function toggle() {
     if (!ctx) return on;
     on = !on;
-    if (on) { ctx.resume().then(() => master.gain.setTargetAtTime(.9, ctx.currentTime, .3)); }
+    if (on) { ctx.resume().then(() => master.gain.setTargetAtTime(level(), ctx.currentTime, .3)); }
     else { master.gain.setTargetAtTime(0, ctx.currentTime, .12); setTimeout(() => { if (!on) ctx.suspend(); }, 600); }
     return on;
+  }
+  function setFinale(b) {
+    finale = b;
+    if (ctx && on) master.gain.setTargetAtTime(level(), ctx.currentTime, 1.2);
+  }
+  function sparkle() {
+    if (!ctx || !on || ctx.state !== 'running') return;
+    const now = ctx.currentTime; if (now - lastSpark < .3) return; lastSpark = now;
+    const P = [89, 91, 93, 96, 98, 101];
+    for (let k = 0; k < 3; k++) celesta(P[(Math.random() * P.length) | 0], now + .02 + k * .07, .022, rnd(-.7, .7));
   }
   document.addEventListener('visibilitychange', () => {
     if (!ctx) return;
     if (document.hidden) ctx.suspend(); else if (on) ctx.resume();
   });
-  return { start, toggle, state: () => ctx ? ctx.state : 'none' };
+  return { start, toggle, finale: setFinale, sparkle };
 })();
 
 const muteBtn = $('#mute');
@@ -801,28 +994,70 @@ $('#s5').addEventListener('click', e => {
 });
 $('#done').addEventListener('click', e => { e.stopPropagation(); if (stage === 'written') goEnd(); });
 
-/* ---------- Cảnh 6: pháo hoa + lời kết ---------- */
-let heartLoop = null;
+/* ---------- Cảnh 6: pháo hoa + trái tim ánh sáng + lời kết ---------- */
+const loveEl = $('#love'), loveGlow = $('#loveGlow');
+const loveChars = [];
+let heartSpan = null;
+(() => {
+  const add = (ch, cls) => { const s = document.createElement('span'); s.className = cls; s.textContent = ch; loveEl.appendChild(s); loveChars.push(s); return s; };
+  for (const ch of Array.from(CONTENT.love.normalize('NFC'))) add(ch === ' ' ? ' ' : ch, 'lc');
+  add(' ', 'lc');
+  heartSpan = add('❤️', 'lc');
+  loveGlow.textContent = CONTENT.love + ' ❤️';
+  $('#loveSub').textContent = CONTENT.loveSub;
+})();
+let endLoops = [];
+function killEndLoops() { endLoops.forEach(l => l.kill()); endLoops = []; }
+function heartCenter() { const r = $('.love-wrap').getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+addEventListener('resize', () => { if (stage === 'end') FX.moveHeart(...heartCenter()); });
+FX.onBurst(() => Music.sparkle());
+
+function startEndLoops() {
+  if (RM) return;
+  endLoops.push(
+    gsap.to(loveGlow, { opacity: .45, duration: 1.6, ease: 'sine.inOut', repeat: -1, yoyo: true }),
+    gsap.to('.bloom', { scale: 1.08, duration: 3.2, ease: 'sine.inOut', repeat: -1, yoyo: true }),
+    gsap.timeline({ repeat: -1, repeatDelay: .8 })
+      .to(FX.heartState, { beat: 1.06, duration: .14, ease: 'power2.out' })
+      .to(FX.heartState, { beat: 1, duration: .22, ease: 'power2.in' })
+      .to(FX.heartState, { beat: 1.035, duration: .12, ease: 'power2.out' })
+      .to(FX.heartState, { beat: 1, duration: .4, ease: 'power2.inOut' }),
+    gsap.timeline({ repeat: -1, repeatDelay: .8 })
+      .to(heartSpan, { scale: 1.25, duration: .14, ease: 'power2.out' })
+      .to(heartSpan, { scale: 1, duration: .22, ease: 'power2.in' })
+      .to(heartSpan, { scale: 1.15, duration: .12, ease: 'power2.out' })
+      .to(heartSpan, { scale: 1, duration: .4, ease: 'power2.inOut' })
+  );
+}
 function goEnd() {
   stage = 'end';
-  gsap.set('.row .btn', { autoAlpha: 0 });
+  killEndLoops();
+  gsap.set(['.row .btn', '#loveSub'], { autoAlpha: 0 });
+  gsap.set(loveChars, { opacity: 0 });
+  gsap.set(loveGlow, { opacity: 0 });
+  gsap.set('.bloom', { opacity: 0, scale: .3 });
+  Music.finale(true);
+  FX.ambient(true);
   show('#s6')
-    .fromTo('#love', { autoAlpha: 0, scale: .7, y: 20 }, { autoAlpha: 1, scale: 1, y: 0, duration: 1.2, ease: 'back.out(1.6)' }, '-=.2')
-    .add(() => FX.fireworks(9), '<')
-    .fromTo('.row .btn', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .12, duration: .5 }, '+=1.2');
-  if (!RM) {
-    if (heartLoop) heartLoop.kill();
-    heartLoop = gsap.timeline({ repeat: -1, repeatDelay: .7, delay: 1.2 })
-      .to(heartSpan, { scale: 1.25, duration: .13, ease: 'power2.out' })
-      .to(heartSpan, { scale: 1, duration: .2, ease: 'power2.in' })
-      .to(heartSpan, { scale: 1.15, duration: .12, ease: 'power2.out' })
-      .to(heartSpan, { scale: 1, duration: .35 });
-  }
+    .addLabel('end', '-=.35')
+    .to('.bloom', { opacity: 1, scale: 1, duration: 2.4, ease: 'power2.out' }, 'end')
+    .add(() => FX.fireworks(true), 'end')
+    .fromTo(loveChars, { opacity: 0, y: 28, scale: .3, rotation: -14 },
+      { opacity: 1, y: 0, scale: 1, rotation: 0, duration: .9, ease: 'back.out(2.2)', stagger: .08 }, 'end+=.5')
+    .add(() => FX.heart(...heartCenter()), 'end+=1')
+    .to(loveGlow, { opacity: 1, duration: 1.4, ease: 'power1.inOut' }, 'end+=1.7')
+    .fromTo('#loveSub', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9, ease: 'power2.out' }, 'end+=3')
+    .add(startEndLoops, 'end+=3.1')
+    .fromTo('.row .btn', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, stagger: .14, duration: .6, ease: 'power2.out' }, 'end+=3.6');
+}
+function leaveEnd() {
+  killEndLoops(); FX.stopEnd(); FX.ambient(false); Music.finale(false);
+  gsap.set(heartSpan, { scale: 1 });
 }
 $('#reread').addEventListener('click', () => {
   if (stage !== 'end') return;
   stage = 'written';
-  FX.stopFireworks();
+  leaveEnd();
   scroller.scrollTop = 0;
   gsap.set(chars, { opacity: 1, y: 0 });
   gsap.set('#h5', { autoAlpha: 0 });
@@ -830,8 +1065,7 @@ $('#reread').addEventListener('click', () => {
 });
 $('#restart').addEventListener('click', () => {
   if (stage !== 'end') return;
-  FX.stopFireworks(); FX.ambient(false);
-  if (heartLoop) heartLoop.kill(); gsap.set(heartSpan, { scale: 1 });
+  leaveEnd();
   if (writeTl) { writeTl.kill(); writeTl = null; }
   if (countTl) { countTl.kill(); countTl = null; }
   ci = 0;
