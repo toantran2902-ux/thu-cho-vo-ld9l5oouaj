@@ -326,7 +326,15 @@ const CONTENT = {
   love: 'Yêu Vợ iuuu',
   loveSub: '23.07.2026 – 23.11.2026',
   reread: 'Đọc lại thư',
-  restart: 'Mở lại từ đầu'
+  restart: 'Mở lại từ đầu',
+
+  // Nhạc: music.mp3 = [0:00–1:41 của bài] nối với [3:18–hết bài]. Mốc tính theo giây trong music.mp3.
+  music: {
+    file: 'music.mp3',
+    letterAt: 43.5,   // vào thư: "khoảnh khắc em bước tới..." → "anh chỉ muốn nói đôi lời" → điệp khúc
+    loopAt: 100.4,    // hết điệp khúc 1 thì quay về đầu bài
+    finaleAt: 101.5,  // cảnh kết: khoảng lặng dâng lên điệp khúc cuối
+  }
 };
 /* ===================================================================== */
 
@@ -626,11 +634,12 @@ const FX = (() => {
 })();
 
 /* =====================================================================
-   NHẠC: "Valse mùa thu" — piano chậm nhịp 3/4 tự soạn (không bản quyền),
+   NHẠC DỰ PHÒNG (chỉ dùng khi music.mp3 không tải được):
+   "Valse mùa thu" — piano chậm nhịp 3/4 tự soạn (không bản quyền),
    tổng hợp bằng Web Audio. Cảnh cuối thêm đệm dây, chuông celesta và
    tiếng lấp lánh theo từng chùm pháo hoa.
    ===================================================================== */
-const Music = (() => {
+const Synth = (() => {
   let ctx = null, master = null, wet = null, on = true, nextBar = 0, bar = 0, finale = false, noiseBuf = null, lastSpark = 0;
   const BEAT = 60 / 66, BAR = BEAT * 3;
   // mỗi ô nhịp: [nốt bass, [hợp âm], [[nốt giai điệu (0 = lặng), số phách], ...]]  — Fa trưởng
@@ -772,6 +781,98 @@ const Music = (() => {
     if (document.hidden) ctx.suspend(); else if (on) ctx.resume();
   });
   return { start, toggle, finale: setFinale, sparkle };
+})();
+
+/* =====================================================================
+   NHẠC CHÍNH: "Người Tốt Nhất Cho Em" (14 Casper, Bon Nghiêm), đã cắt
+   sẵn trong music.mp3. Chuyển đoạn bằng cách hạ nhỏ – nhảy – tăng lại.
+   Tiếng pháo hoa: tiếng lách tách không cao độ nên không lệch tông bài hát.
+   ===================================================================== */
+const Music = (() => {
+  const M = CONTENT.music, VOL = .9;
+  const audio = new Audio();
+  audio.preload = 'auto'; audio.setAttribute('playsinline', ''); audio.src = M.file;
+  let ctx = null, gain = null, crackBuf = null, on = true, started = false, synth = false, busy = false, lastCrack = 0;
+  // tải trọn file vào bộ nhớ để tua được ở mọi trình duyệt/webview (kể cả máy chủ không hỗ trợ byte-range)
+  if (window.fetch && window.URL && URL.createObjectURL) {
+    fetch(M.file).then(r => (r.ok ? r.blob() : null)).then(b => {
+      if (b && !started) { audio.src = URL.createObjectURL(b); audio.load(); }
+    }).catch(() => {});
+  }
+  audio.addEventListener('error', () => { if (started && !synth) { synth = true; Synth.start(); } });
+
+  function fadeTo(v, sec) {
+    if (gain) gain.gain.setTargetAtTime(v, ctx.currentTime, sec / 3);
+    else audio.volume = v;
+  }
+  let target = 0;
+  function jump(to) {
+    if (synth) return;
+    target = to;
+    if (busy) return;
+    busy = true; fadeTo(0, .35);
+    setTimeout(() => {
+      try { audio.currentTime = target; } catch (e) {}
+      if (on) { const p = audio.play(); if (p && p.catch) p.catch(() => {}); }
+      fadeTo(on ? VOL : 0, .7); busy = false;
+    }, 420);
+  }
+  audio.addEventListener('timeupdate', () => {
+    if (busy || synth) return;
+    const t = audio.currentTime;
+    if ((t >= M.loopAt && t < M.loopAt + 1) || (audio.duration && t >= audio.duration - .6)) jump(0);
+  });
+  audio.addEventListener('ended', () => jump(0));
+
+  function start() {
+    if (started) { if (on && !synth) audio.play().catch(() => {}); return; }
+    started = true;
+    if (audio.error) { synth = true; Synth.start(); return; }
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      ctx = new AC();
+      gain = ctx.createGain(); gain.gain.value = 0;
+      ctx.createMediaElementSource(audio).connect(gain); gain.connect(ctx.destination);
+      if (ctx.resume) ctx.resume();
+      crackBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * .6), ctx.sampleRate);
+      const d = crackBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() < .004 ? (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2) : 0;
+    } catch (e) { ctx = null; gain = null; }
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => { synth = true; Synth.start(); });
+    fadeTo(VOL, 1.5);
+  }
+  function toggle() {
+    if (synth) { on = Synth.toggle(); return on; }
+    if (!started) return on;
+    on = !on;
+    if (on) { if (ctx) ctx.resume(); audio.play().catch(() => {}); fadeTo(VOL, .6); }
+    else { fadeTo(0, .3); setTimeout(() => { if (!on) audio.pause(); }, 450); }
+    return on;
+  }
+  function cue(name) {
+    if (synth) { Synth.finale(name === 'finale'); return; }
+    if (!started) return;
+    const t = audio.currentTime;
+    if (name === 'letter') { if (!(t >= M.letterAt - 4 && t <= M.letterAt + 16)) jump(M.letterAt); }
+    else if (name === 'finale') jump(M.finaleAt);
+    else if (name === 'intro') jump(0);
+  }
+  function sparkle() {
+    if (synth) { Synth.sparkle(); return; }
+    if (!ctx || !on || ctx.state !== 'running') return;
+    const now = ctx.currentTime; if (now - lastCrack < .35) return; lastCrack = now;
+    const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = crackBuf; hp.type = 'highpass'; hp.frequency.value = 2500; g.gain.value = .18;
+    s.playbackRate.value = .8 + Math.random() * .5;
+    s.connect(hp); hp.connect(g); g.connect(ctx.destination); s.start(now + .05);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!started || synth) return;
+    if (document.hidden) audio.pause(); else if (on) { if (ctx) ctx.resume(); audio.play().catch(() => {}); }
+  });
+  return { start, toggle, cue, sparkle, finale: b => cue(b ? 'finale' : 'none') };
 })();
 
 const muteBtn = $('#mute');
@@ -965,6 +1066,7 @@ function finishWriting() {
 }
 function goLetter() {
   stage = 'writing';
+  Music.cue('letter');
   FX.ambient(false);
   scroller.scrollTop = 0;
   gsap.set('#done', { autoAlpha: 0 });
@@ -1058,6 +1160,7 @@ $('#reread').addEventListener('click', () => {
   if (stage !== 'end') return;
   stage = 'written';
   leaveEnd();
+  Music.cue('letter');
   scroller.scrollTop = 0;
   gsap.set(chars, { opacity: 1, y: 0 });
   gsap.set('#h5', { autoAlpha: 0 });
@@ -1066,6 +1169,7 @@ $('#reread').addEventListener('click', () => {
 $('#restart').addEventListener('click', () => {
   if (stage !== 'end') return;
   leaveEnd();
+  Music.cue('intro');
   if (writeTl) { writeTl.kill(); writeTl = null; }
   if (countTl) { countTl.kill(); countTl = null; }
   ci = 0;
