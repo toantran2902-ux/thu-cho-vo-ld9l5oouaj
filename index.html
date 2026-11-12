@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1b1424">
+<title>Có thư cho Vợ iuuu nè 💌</title>
+<meta name="description" content="Mở ra xem đi, chồng gửi đó.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Có thư cho Vợ iuuu nè 💌">
+<meta property="og:description" content="Mở ra xem đi, chồng gửi đó.">
+<meta property="og:image" content="https://toantran2902-ux.github.io/thu-cho-vo-ld9l5oouaj/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://toantran2902-ux.github.io/thu-cho-vo-ld9l5oouaj/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%236e1f2e'/%3E%3Cpath d='M16 23c-4-3-7-5-7-8.5a3.5 3.5 0 0 1 7-1.2a3.5 3.5 0 0 1 7 1.2c0 3.5-3 5.5-7 8.5z' fill='%23f3e6d3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#1b1424;
+  --cream:#f3e6d3;
+  --paper:#f4e8d5;
+  --rose:#b9706a;
+  --rose-l:#e3a59a;
+  --wine:#6e1f2e;
+  --ink:#341c26;
+  --dust:#f1d9b5;
+  --hand:'Dancing Script','Segoe Script',cursive;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .21 0 0 0 0 .12 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{
+  background:
+    radial-gradient(140% 70% at 50% -10%,#4a2a45 0%,rgba(74,42,69,0) 62%),
+    radial-gradient(120% 55% at 50% 112%,#40202f 0%,rgba(64,32,47,0) 62%),
+    var(--night);
+  color:var(--cream);font-family:var(--serif);
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#sky{z-index:0}
+#fx{z-index:6}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--rose-l);outline-offset:4px}
+
+.scene{
+  position:fixed;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
+  visibility:hidden;opacity:0;
+}
+.hint{
+  position:absolute;left:16px;right:16px;bottom:calc(26px + env(safe-area-inset-bottom));
+  text-align:center;font-style:italic;font-size:14px;color:rgba(241,217,181,.72);
+  visibility:hidden;opacity:0;
+}
+
+/* ---------- Cảnh 1–2: phong bì ---------- */
+#s1{cursor:pointer}
+.title{
+  font-family:var(--hand);font-weight:700;font-size:34px;line-height:1.2;text-align:center;
+  margin-bottom:46px;color:var(--cream);text-shadow:0 2px 18px rgba(110,31,46,.55);
+  opacity:0;
+}
+.env{position:relative;width:300px;height:200px;opacity:0}
+.env-shadow{position:absolute;left:20px;right:20px;bottom:-22px;height:30px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0))}
+.env-in{position:absolute;inset:0;will-change:transform}
+.env-back{position:absolute;inset:0;border-radius:3px;background:var(--noise),linear-gradient(#7c5a3c,#946e4b)}
+.letter{
+  position:absolute;left:14px;right:14px;top:10px;height:178px;z-index:2;
+  border-radius:3px;background:var(--noise),var(--paper);color:var(--ink);
+  text-align:center;padding-top:16px;box-shadow:0 -4px 14px rgba(0,0,0,.18);will-change:transform;
+}
+.lt-small{font-style:italic;font-size:13px;opacity:.75}
+.lt-big{font-family:var(--hand);font-weight:700;font-size:36px;color:var(--wine);line-height:1.15}
+.lt-rule{width:54px;height:1px;margin:8px auto 0;background:var(--rose);opacity:.6}
+.pk{position:absolute;inset:0;z-index:3}
+.pk-l{clip-path:polygon(0 0,50% 56%,0 100%);background:var(--noise),linear-gradient(90deg,#b98f63,#cba477)}
+.pk-r{clip-path:polygon(100% 0,50% 56%,100% 100%);background:var(--noise),linear-gradient(270deg,#b48a5e,#c99f72)}
+.pk-b{clip-path:polygon(0 100%,50% 47%,100% 100%);background:var(--noise),linear-gradient(0deg,#b08656,#d2ab7e)}
+.flap{position:absolute;left:0;top:0;width:300px;height:118px;z-index:4;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  background:var(--noise),linear-gradient(180deg,#d8b285,#c0976b);will-change:transform}
+.seal{position:absolute;left:119px;top:87px;width:62px;height:62px;z-index:5;will-change:transform}
+.seal svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+
+/* ---------- Cảnh 3: lịch bloc ---------- */
+.bloc{position:relative;width:250px}
+.page{
+  position:relative;border-radius:4px 4px 6px 6px;padding:42px 18px 22px;text-align:center;
+  background:var(--noise),var(--paper);color:var(--ink);
+}
+.bloc > .page:first-of-type{
+  box-shadow:0 4px 0 -1px #e2d1b8,0 8px 0 -2px #d4c1a5,0 24px 34px -14px rgba(0,0,0,.65);
+}
+.cover{position:absolute;inset:0;transform-origin:10% 0;will-change:transform}
+.bloc-top{position:absolute;left:0;right:0;top:0;height:24px;z-index:3;border-radius:4px 4px 0 0;
+  background:linear-gradient(#7d2535,var(--wine));display:flex;justify-content:center;gap:120px;align-items:center}
+.bloc-top i{width:9px;height:9px;border-radius:50%;background:var(--night);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.b-small{font-style:italic;font-size:14px;opacity:.72}
+.b-num{font-weight:700;font-size:108px;line-height:1.02;color:var(--wine);font-variant-numeric:tabular-nums lining-nums}
+.b-hand{font-family:var(--hand);font-size:28px;line-height:1.2}
+.clock{display:flex;gap:8px;margin-top:34px}
+.clock div{min-width:66px;text-align:center}
+.clock b{display:block;font-weight:400;font-size:26px;font-variant-numeric:tabular-nums lining-nums;color:var(--cream)}
+.clock span{font-style:italic;font-size:12px;color:rgba(241,217,181,.65)}
+.until{font-family:var(--hand);font-size:25px;color:var(--rose-l);margin-top:20px;text-align:center}
+
+/* ---------- Cảnh 4: timeline ---------- */
+#vp{width:100vw;margin:0 -16px;touch-action:pan-y;cursor:grab}
+#track{display:flex;gap:18px;padding:18px 0 10px;will-change:transform}
+.card{
+  --cw:280px;flex:0 0 var(--cw);height:min(372px,60vh);position:relative;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:30px 20px 26px;border-radius:5px;color:var(--ink);
+  background:var(--noise),linear-gradient(170deg,#f6ebd9,#ead6b9);
+  box-shadow:0 20px 30px -18px rgba(0,0,0,.7);will-change:transform,opacity;
+}
+.card::before{content:"";position:absolute;top:-11px;left:50%;width:86px;height:24px;margin-left:-43px;
+  background:rgba(185,112,106,.55);transform:rotate(-3deg)}
+.c-month{font-weight:700;font-size:27px;color:var(--wine)}
+.c-date{font-style:italic;font-size:14px;opacity:.7;margin-top:2px;font-variant-numeric:lining-nums}
+.c-art{width:150px;height:124px;margin:auto 0;overflow:visible;will-change:transform}
+.c-art *{fill:none;stroke:var(--ink);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.c-art .f{fill:var(--wine);stroke:none}
+.c-art .lf{fill:rgba(185,112,106,.4)}
+.c-line{font-family:var(--hand);font-size:25px;line-height:1.25}
+.dots{display:flex;gap:12px;margin-top:16px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(241,217,181,.3);transition:transform .35s,background-color .35s}
+.dots i.on{background:var(--rose-l);transform:scale(1.45)}
+.btn{
+  font-style:italic;font-size:17px;padding:13px 26px;border-radius:999px;
+  background:var(--wine);color:var(--cream);border:1px solid rgba(243,230,211,.28);
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.8);
+}
+.btn.ghost{background:transparent}
+#toLetter{margin-top:22px;visibility:hidden;opacity:0}
+
+/* ---------- Cảnh 5: thư ---------- */
+#s5{justify-content:flex-start;padding-top:calc(18px + env(safe-area-inset-top))}
+.paper{
+  position:relative;width:100%;max-width:420px;flex:1 1 auto;min-height:0;
+  border-radius:5px;background:var(--noise),var(--paper);
+  box-shadow:0 24px 40px -20px rgba(0,0,0,.75);
+}
+#pscroll{position:relative;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;touch-action:pan-y;border-radius:inherit;scrollbar-width:none}
+#pscroll::-webkit-scrollbar{display:none}
+#lt{
+  min-height:100%;font-family:var(--hand);font-size:22px;line-height:36px;color:var(--ink);
+  padding:28px 20px 44px 46px;
+  background-image:
+    linear-gradient(90deg,transparent 33px,rgba(110,31,46,.38) 33px,rgba(110,31,46,.38) 34.5px,transparent 34.5px),
+    repeating-linear-gradient(180deg,transparent 0,transparent 35px,rgba(185,112,106,.32) 35px,rgba(185,112,106,.32) 36px);
+  background-position:0 0,0 19px;
+}
+#lt p{text-indent:1.4em}
+#lt p.greet,#lt p.sign{text-indent:0;font-weight:700}
+#lt p.sign{text-align:right;margin-top:36px;color:var(--wine)}
+#lt .w{white-space:nowrap}
+#lt .ch{display:inline-block;opacity:0;text-indent:0}
+.foot{position:relative;height:66px;width:100%;flex:0 0 auto}
+.foot .hint{bottom:auto;top:22px}
+#done{position:absolute;left:50%;top:12px;transform:translateX(-50%);visibility:hidden;opacity:0;white-space:nowrap}
+
+/* ---------- Cảnh 6: kết ---------- */
+.love{font-family:var(--hand);font-weight:700;font-size:54px;line-height:1.15;text-align:center;
+  text-shadow:0 0 24px rgba(217,72,95,.55),0 2px 4px rgba(0,0,0,.4);opacity:0}
+.love .h{display:inline-block}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
+.row .btn{visibility:hidden;opacity:0}
+
+/* ---------- nút nhạc ---------- */
+#mute{
+  position:fixed;z-index:20;top:calc(12px + env(safe-area-inset-top));right:12px;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(243,230,211,.1);border:1px solid rgba(243,230,211,.25);
+  visibility:hidden;opacity:0;
+}
+#mute svg{width:18px;height:18px;fill:none;stroke:var(--cream);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#mute .x{display:none}
+#mute.off .wave{display:none}
+#mute.off .x{display:inline}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+
+<section class="scene" id="s1" aria-label="Phong bì">
+  <h1 class="title" id="tIntro"></h1>
+  <div class="env" id="env" role="button" tabindex="0" aria-label="Mở phong bì">
+    <div class="env-shadow"></div>
+    <div class="env-in">
+      <div class="env-back"></div>
+      <div class="letter"><p class="lt-small" id="tFrom"></p><p class="lt-big" id="tTo"></p><div class="lt-rule"></div></div>
+      <div class="pk pk-l"></div><div class="pk pk-r"></div><div class="pk pk-b"></div>
+      <div class="flap"></div>
+      <div class="seal"><svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs><radialGradient id="wx" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#a23648"/><stop offset=".55" stop-color="#6e1f2e"/><stop offset="1" stop-color="#44101d"/></radialGradient></defs>
+        <path id="sealBlob" fill="url(#wx)"/>
+        <circle cx="32" cy="32" r="19" fill="none" stroke="#45101c" stroke-width="2.2" opacity=".55"/>
+        <circle cx="31.3" cy="31.3" r="19" fill="none" stroke="#c4566a" stroke-width=".9" opacity=".45"/>
+        <path d="M32 42c-6-4.6-10-7.6-10-12.2a5 5 0 0 1 10-1.9a5 5 0 0 1 10 1.9c0 4.6-4 7.6-10 12.2z" fill="#4e1220"/>
+        <path d="M31.2 41.2c-6-4.6-10-7.6-10-12.2a5 5 0 0 1 10-1.9" fill="none" stroke="#c4566a" stroke-width=".8" opacity=".55"/>
+      </svg></div>
+    </div>
+  </div>
+  <p class="hint" id="h1a"></p>
+  <p class="hint" id="h1b"></p>
+</section>
+
+<section class="scene" id="s3" aria-label="Bộ đếm ngày">
+  <div class="bloc">
+    <div class="bloc-top"><i></i><i></i></div>
+    <div class="page">
+      <p class="b-small" id="tSince"></p>
+      <p class="b-num" id="days">0</p>
+      <p class="b-hand" id="tDays"></p>
+    </div>
+    <div class="page cover" id="cover">
+      <p class="b-small" id="tCoverWd"></p>
+      <p class="b-num" id="tCoverDay"></p>
+      <p class="b-hand" id="tCoverMonth"></p>
+    </div>
+  </div>
+  <div class="clock" id="clock">
+    <div><b id="cD">0</b><span>ngày</span></div>
+    <div><b id="cH">00</b><span>giờ</span></div>
+    <div><b id="cM">00</b><span>phút</span></div>
+    <div><b id="cS">00</b><span>giây</span></div>
+  </div>
+  <p class="until" id="until"></p>
+  <p class="hint" id="h3"></p>
+</section>
+
+<section class="scene" id="s4" aria-label="Bốn tháng">
+  <div id="vp"><div id="track"></div></div>
+  <div class="dots" id="dots"></div>
+  <button class="btn" id="toLetter"></button>
+  <p class="hint" id="h4"></p>
+</section>
+
+<section class="scene" id="s5" aria-label="Thư">
+  <div class="paper"><div id="pscroll"><div id="lt"></div></div></div>
+  <div class="foot"><p class="hint" id="h5"></p><button class="btn" id="done"></button></div>
+</section>
+
+<section class="scene" id="s6" aria-label="Lời kết">
+  <p class="love" id="love"></p>
+  <div class="row"><button class="btn ghost" id="reread"></button><button class="btn" id="restart"></button></div>
+</section>
+
+<canvas id="fx"></canvas>
+
+<button id="mute" aria-label="Tắt nhạc" aria-pressed="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a8 8 0 0 1 0 11"/><path class="x" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>window.gsap||document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"><\/script>')</script>
+<script>
+/* =====================================================================
+   SỬA CHỮ Ở ĐÂY — mọi chữ hiện trên trang đều nằm trong CONTENT.
+   (Tiêu đề và mô tả khi gửi link qua chat nằm ở các thẻ <title>,
+   og:title, og:description ở đầu file.)
+   ===================================================================== */
+const CONTENT = {
+  start: '2026-07-23T00:00:00+07:00',      // ngày bắt đầu yêu
+  milestone: '2026-11-23T00:00:00+07:00',  // ngày tròn 4 tháng
+
+  introTitle: 'Có thư cho Vợ iuuu nè 💌',
+  introHint: 'chạm vào phong bì nha',
+  letterFrom: 'Chồng gửi',
+  letterTo: 'Vợ iuuu',
+  nextHint: 'chạm để đi tiếp',
+
+  coverWeekday: 'Thứ Năm',
+  coverDay: '23',
+  coverMonth: 'Tháng Bảy, 2026',
+  since: 'Từ ngày 23.07.2026',
+  daysLabel: 'ngày bên nhau',
+  untilBefore: 'Còn {n} ngày nữa là tròn 4 tháng',
+  untilAfter: 'Tròn 4 tháng rồi đó vợ',
+
+  cardsHint: 'vuốt hoặc chạm để qua tháng',
+  toLetter: 'Đọc thư của chồng',
+  cards: [
+    { month: 'Tháng 1', date: '23/07 – 23/08, 31 ngày', art: 'thu', line: 'Ngày 23/07. Mọi thứ bắt đầu từ đây.' },
+    { month: 'Tháng 2', date: '23/08 – 23/09, 31 ngày', art: 'mam', line: 'Qua tháng đầu rồi mà vẫn chưa thấy đủ.' },
+    { month: 'Tháng 3', date: '23/09 – 23/10, 30 ngày', art: 'tim', line: 'Vợ gọi chồng, chồng gọi vợ iuuu. Quen miệng luôn rồi.' },
+    { month: 'Tháng 4', date: '23/10 – 23/11, 31 ngày', art: 'nha', line: 'Tháng thứ tư. Hai vợ chồng nuôi nhau.' }
+  ],
+
+  // Lá thư: mỗi dòng là 1 đoạn. 'greet' = lời gọi đầu thư, 'sign' = chữ ký.
+  letter: [
+    ['greet', 'Vợ iuuu thương,'],
+    ['', 'Hôm nay là ngày 23/11, tính ra đã một trăm hai mươi ba ngày, từ lúc hạ còn nắng cho đến khi thu đã tàn. Bốn tháng nghe chẳng dài, vậy mà chồng thấy có những người chỉ cần cạnh nhau một mùa là đã thành người nhà.'],
+    ['', 'Chồng vụng lời, không biết viết cho hay, nên xin nói điều thật. Chồng không dám hứa chuyện trăm năm. Chồng chỉ xin giữ một lời nhỏ mà ngày nào cũng làm được: hai vợ chồng mình nuôi nhau. Vợ mỏi thì chồng đỡ, chồng nhọc thì vợ đỡ lại. Như hai người cùng giữ một ngọn đèn qua đêm dài.'],
+    ['', 'Chồng chỉ mong những tháng sau cứ nối vào những tháng này, bình thường cũng được, miễn còn có vợ.'],
+    ['', 'Cảm ơn vợ đã chịu làm vợ của chồng.'],
+    ['sign', 'Chồng của vợ']
+  ],
+  writeHint: 'chạm để chồng viết nhanh hơn',
+  done: 'Đọc xong rồi',
+
+  love: 'Yêu Vợ iuuu',
+  reread: 'Đọc lại thư',
+  restart: 'Mở lại từ đầu'
+};
+/* ===================================================================== */
+
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const START = new Date(CONTENT.start).getTime();
+const MILE = new Date(CONTENT.milestone).getTime();
+const DAY = 864e5;
+
+/* ---------- đổ chữ vào trang ---------- */
+const txt = (id, s) => { $(id).textContent = s; };
+txt('#tIntro', CONTENT.introTitle);
+txt('#h1a', CONTENT.introHint);
+txt('#h1b', CONTENT.nextHint);
+txt('#tFrom', CONTENT.letterFrom);
+txt('#tTo', CONTENT.letterTo);
+txt('#tCoverWd', CONTENT.coverWeekday);
+txt('#tCoverDay', CONTENT.coverDay);
+txt('#tCoverMonth', CONTENT.coverMonth);
+txt('#tSince', CONTENT.since);
+txt('#tDays', CONTENT.daysLabel);
+txt('#h3', CONTENT.nextHint);
+txt('#h4', CONTENT.cardsHint);
+txt('#toLetter', CONTENT.toLetter);
+txt('#h5', CONTENT.writeHint);
+txt('#done', CONTENT.done);
+txt('#reread', CONTENT.reread);
+txt('#restart', CONTENT.restart);
+$('#love').innerHTML = '';
+$('#love').append(CONTENT.love + ' ');
+const heartSpan = document.createElement('span'); heartSpan.className = 'h'; heartSpan.textContent = '❤️';
+$('#love').append(heartSpan);
+
+/* dấu sáp: viền gợn không đều */
+(() => {
+  let d = '';
+  for (let i = 0; i <= 36; i++) {
+    const a = i / 36 * Math.PI * 2;
+    const r = 28 + Math.sin(a * 5 + 1) * 1.3 + Math.sin(a * 11) * .8 + Math.cos(a * 3) * .9;
+    d += (i ? 'L' : 'M') + (32 + Math.cos(a) * r).toFixed(1) + ' ' + (32 + Math.sin(a) * r).toFixed(1);
+  }
+  $('#sealBlob').setAttribute('d', d + 'Z');
+})();
+
+/* ---------- hình vẽ cho 4 thẻ ---------- */
+const H = (x, y, s) => `M${x} ${y}c${-s*.5} ${-s*.4} ${-s*.9} ${-s*.65} ${-s*.9} ${-s*1.05}a${s*.43} ${s*.43} 0 0 1 ${s*.9} ${-s*.16}a${s*.43} ${s*.43} 0 0 1 ${s*.9} ${s*.16}c0 ${s*.4} ${-s*.4} ${s*.65} ${-s*.9} ${s*1.05}z`;
+const ART = {
+  thu: `<rect x="28" y="36" width="88" height="58" rx="4"/><path d="M29 38L72 68L115 38"/><path d="M29 93L60 64M115 93L84 64" opacity=".5"/><path class="f" d="${H(72, 80, 12)}"/><path d="M14 34l8 4M10 50h9M16 66l7-3" opacity=".45"/>`,
+  mam: `<path d="M30 98Q72 91 114 98"/><path d="M72 96C72 80 70 68 72 52"/><path class="lf" d="M72 72C59 72 48 64 45 52C59 51 69 59 72 72Z"/><path class="lf" d="M72 62C78 51 90 45 101 45C98 57 86 64 72 62Z"/><path class="f" d="${H(72, 48, 13)}"/>`,
+  tim: `<path d="${H(58, 98, 46)}"/><path class="lf" d="${H(88, 86, 34)}"/><path d="M104 22l4-6M112 30l7-2M96 18l-1-7" opacity=".5"/>`,
+  nha: `<path d="M24 98H120"/><path d="M30 60L72 28L114 60"/><path d="M38 54V98H106V54"/><path d="M63 98V75H81V98"/><rect x="45" y="64" width="12" height="12"/><path d="M92 40V28H100V46"/><path class="f" d="${H(96, 20, 9)}"/><path class="lf" d="${H(108, 6, 6)}"/>`
+};
+const track = $('#track'), dotsEl = $('#dots');
+CONTENT.cards.forEach(c => {
+  const a = document.createElement('article');
+  a.className = 'card';
+  a.innerHTML = `<p class="c-month"></p><p class="c-date"></p><svg class="c-art" viewBox="0 0 144 112" aria-hidden="true">${ART[c.art] || ''}</svg><p class="c-line"></p>`;
+  a.querySelector('.c-month').textContent = c.month;
+  a.querySelector('.c-date').textContent = c.date;
+  a.querySelector('.c-line').textContent = c.line;
+  track.appendChild(a);
+  dotsEl.appendChild(document.createElement('i'));
+});
+const cards = [...track.children], dots = [...dotsEl.children];
+
+/* =====================================================================
+   HẠT: bụi sao + pháo hoa trái tim (canvas sau), cánh hoa (canvas trước)
+   ===================================================================== */
+const FX = (() => {
+  const back = $('#sky'), front = $('#fx');
+  const bc = back.getContext('2d'), fc = front.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+  let W = 0, H = 0, t = 0, stars = [], petals = [], sparks = [], rockets = [];
+  let ambient = false, fwUntil = 0, fwNext = 0, frontDirty = false;
+
+  const mk = (w, h, draw) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d')); return c; };
+  const glow = (col) => mk(32, 32, g => {
+    const r = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+    r.addColorStop(0, 'rgba(255,250,240,1)'); r.addColorStop(.22, col); r.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = r; g.fillRect(0, 0, 32, 32);
+  });
+  const starSpr = glow('rgba(246,222,186,.85)');
+  const fwSpr = [glow('rgba(246,214,168,.9)'), glow('rgba(231,154,144,.9)'), glow('rgba(217,72,95,.9)')];
+  const petalSpr = [['#ecc0b2', '#b9706a'], ['#cf8a80', '#8e3442'], ['#dda092', '#6e1f2e']].map(([a, b]) => mk(44, 26, g => {
+    const gr = g.createLinearGradient(0, 0, 44, 26); gr.addColorStop(0, a); gr.addColorStop(1, b);
+    g.fillStyle = gr; g.beginPath(); g.moveTo(3, 13); g.bezierCurveTo(10, 1, 30, 0, 38, 5);
+    g.quadraticCurveTo(43, 9, 39, 13); g.quadraticCurveTo(43, 17, 38, 21); g.bezierCurveTo(30, 26, 10, 25, 3, 13); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,.2)'; g.lineWidth = 1; g.beginPath(); g.moveTo(7, 13); g.quadraticCurveTo(22, 11, 35, 13); g.stroke();
+  }));
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  function resize() {
+    W = innerWidth; H = innerHeight;
+    for (const c of [back, front]) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); }
+    const n = Math.min(150, Math.round(W * H / 2400));
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() < .12 ? rnd(1.6, 2.8) : rnd(.5, 1.4),
+      a: rnd(.3, .9), s: rnd(.6, 2.2), p: rnd(0, 6.28)
+    }));
+    if (RM) drawBack(0);
+  }
+
+  function heartBurst(x, y) {
+    const n = 52, k = rnd(10, 13), main = fwSpr[(Math.random() * 3) | 0], inner = fwSpr[(Math.random() * 3) | 0];
+    for (let ring = 0; ring < 2; ring++) {
+      const sc = ring ? k * .5 : k, cnt = ring ? 24 : n;
+      for (let i = 0; i < cnt; i++) {
+        const a = i / cnt * Math.PI * 2, s = Math.sin(a);
+        const hx = 16 * s * s * s, hy = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
+        sparks.push({ x, y, vx: hx * sc, vy: hy * sc, life: 1, decay: rnd(.5, .7), size: ring ? rnd(6, 8) : rnd(7, 11), spr: ring ? inner : main });
+      }
+    }
+  }
+  function launch() {
+    const x = W * rnd(.18, .82), ty = H * rnd(.12, .38), dur = rnd(.8, 1.05);
+    rockets.push({ x, y: H + 10, vx: rnd(-14, 14), vy: -(H + 10 - ty) / dur, ty });
+  }
+
+  function drawBack(dt) {
+    bc.setTransform(DPR, 0, 0, DPR, 0, 0);
+    bc.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      bc.globalAlpha = RM ? s.a : s.a * (.55 + .45 * Math.sin(t * s.s + s.p));
+      const d = s.r * 6; bc.drawImage(starSpr, s.x - d / 2, s.y - d / 2, d, d);
+    }
+    if (t < fwUntil && t >= fwNext) { launch(); fwNext = t + rnd(.45, 1); }
+    if (rockets.length || sparks.length) {
+      bc.globalCompositeOperation = 'lighter';
+      for (let i = rockets.length - 1; i >= 0; i--) {
+        const r = rockets[i]; r.x += r.vx * dt; r.y += r.vy * dt;
+        bc.globalAlpha = .9; bc.drawImage(fwSpr[0], r.x - 6, r.y - 6, 12, 12);
+        bc.globalAlpha = .35; bc.drawImage(fwSpr[0], r.x - 4, r.y + 8, 8, 8);
+        if (r.y <= r.ty) { heartBurst(r.x, r.y); rockets.splice(i, 1); }
+      }
+      const drag = Math.pow(.35, dt);
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const p = sparks[i];
+        p.vx *= drag; p.vy = p.vy * drag + 38 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt * p.decay;
+        if (p.life <= 0) { sparks[i] = sparks[sparks.length - 1]; sparks.pop(); continue; }
+        bc.globalAlpha = p.life; bc.drawImage(p.spr, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      }
+      bc.globalCompositeOperation = 'source-over';
+    }
+    bc.globalAlpha = 1;
+  }
+
+  function addPetal(x, y, vx, vy) {
+    petals.push({ x, y, vx, vy, rot: rnd(0, 6.28), vr: rnd(-2.4, 2.4), fp: rnd(0, 6.28), fs: rnd(1.5, 3.5),
+      sw: rnd(10, 26), sf: rnd(.8, 1.8), ph: rnd(0, 6.28), sc: rnd(.75, 1.3), term: rnd(38, 72),
+      spr: petalSpr[(Math.random() * 3) | 0], a: rnd(.75, 1) });
+  }
+  function drawFront(dt) {
+    if (!petals.length && !ambient) {
+      if (frontDirty) { fc.setTransform(1, 0, 0, 1, 0, 0); fc.clearRect(0, 0, front.width, front.height); frontDirty = false; }
+      return;
+    }
+    fc.setTransform(1, 0, 0, 1, 0, 0); fc.clearRect(0, 0, front.width, front.height); frontDirty = true;
+    if (ambient && petals.length < 14 && Math.random() < dt * 3) addPetal(rnd(0, W), -20, rnd(-10, 10), rnd(25, 45));
+    const drag = Math.pow(.3, dt);
+    for (let i = petals.length - 1; i >= 0; i--) {
+      const p = petals[i];
+      p.vx *= drag; p.vy = Math.min(p.vy * drag + 90 * dt, p.term);
+      p.x += (p.vx + Math.sin(t * p.sf + p.ph) * p.sw) * dt; p.y += p.vy * dt;
+      p.rot += p.vr * dt; p.fp += p.fs * dt;
+      if (p.y > H + 30 || p.x < -40 || p.x > W + 40) { petals[i] = petals[petals.length - 1]; petals.pop(); continue; }
+      const c = Math.cos(p.rot), s = Math.sin(p.rot), fl = Math.cos(p.fp) * p.sc, k = p.sc;
+      fc.setTransform(DPR * c * fl, DPR * s * fl, -DPR * s * k, DPR * c * k, p.x * DPR, p.y * DPR);
+      fc.globalAlpha = p.a; fc.drawImage(p.spr, -11, -6.5, 22, 13);
+    }
+    fc.globalAlpha = 1;
+  }
+
+  let last = 0;
+  function loop(now) {
+    const dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now; t += dt;
+    drawBack(dt); drawFront(dt);
+    requestAnimationFrame(loop);
+  }
+  resize();
+  addEventListener('resize', resize);
+  if (!RM) requestAnimationFrame(loop);
+
+  return {
+    burst(x, y, n) {
+      if (RM) return;
+      for (let i = 0; i < n; i++) { const a = rnd(0, 6.28), sp = rnd(140, 380); addPetal(x, y, Math.cos(a) * sp, Math.sin(a) * sp - 140); }
+    },
+    ambient(on) { ambient = on && !RM; },
+    fireworks(sec) { if (RM) return; fwUntil = t + sec; fwNext = t; },
+    stopFireworks() { fwUntil = 0; rockets.length = 0; sparks.length = 0; }
+  };
+})();
+
+/* =====================================================================
+   NHẠC: hộp nhạc tự soạn bằng Web Audio (không dùng file, không bản quyền)
+   ===================================================================== */
+const Music = (() => {
+  let ctx = null, master = null, wet = null, on = true, timer = 0, t0 = 0, idx = 0, loopN = 0;
+  const B = 60 / 76;
+  const MEL = [[76,1],[79,1],[84,1],[79,1], [81,1.5],[79,.5],[76,2], [77,1],[81,1],[84,1],[81,1], [83,1.5],[81,.5],[79,2],
+               [76,1],[79,1],[84,1],[88,1], [86,1.5],[84,.5],[81,2], [81,1],[84,1],[77,1],[81,1], [79,2],[74,1],[71,1]];
+  const CH = [[60,4],[57,3],[53,4],[55,4],[60,4],[57,3],[53,4],[55,4]];
+  const EV = []; let b = 0;
+  for (const [m, l] of MEL) { EV.push({ b, m, v: .15, d: 2.6 }); b += l; }
+  CH.forEach(([r, third], i) => [0, 7, 12, 12 + third].forEach((iv, k) => EV.push({ b: i * 4 + k, m: r + iv - 12, v: .05, d: 2 })));
+  EV.sort((x, y) => x.b - y.b);
+  const LOOP = b + 2;
+  const f = m => 440 * Math.pow(2, (m - 69) / 12);
+
+  function note(m, t, v, d) {
+    const g = ctx.createGain(), o = ctx.createOscillator(), o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = f(m);
+    o2.type = 'sine'; o2.frequency.value = f(m) * 3.01;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    g2.gain.setValueAtTime(.3, t); g2.gain.exponentialRampToValueAtTime(.001, t + .45);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master); g.connect(wet);
+    o.start(t); o2.start(t); o.stop(t + d + .05); o2.stop(t + .5);
+  }
+  function tick() {
+    if (!ctx) return;
+    const ahead = ctx.currentTime + .4;
+    for (;;) {
+      const e = EV[idx], time = t0 + (loopN * LOOP + e.b) * B;
+      if (time > ahead) break;
+      if (time > ctx.currentTime - .05) note(e.m, time, e.v, e.d);
+      if (++idx >= EV.length) { idx = 0; loopN++; }
+    }
+  }
+  function impulse(sec) {
+    const len = Math.floor(ctx.sampleRate * sec), buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const dd = buf.getChannelData(ch); for (let i = 0; i < len; i++) dd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    return buf;
+  }
+  function start() {
+    if (ctx) { if (on) ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      ctx = new AC();
+      const comp = ctx.createDynamicsCompressor(); comp.connect(ctx.destination);
+      master = ctx.createGain(); master.gain.value = 0; master.connect(comp);
+      const conv = ctx.createConvolver(); conv.buffer = impulse(2.4);
+      wet = ctx.createGain(); wet.gain.value = .35; wet.connect(conv); conv.connect(master);
+      const sb = ctx.createBufferSource(); sb.buffer = ctx.createBuffer(1, 1, 22050); sb.connect(ctx.destination); sb.start(0);
+      if (ctx.resume) ctx.resume();
+      t0 = ctx.currentTime + .2;
+      master.gain.setValueAtTime(0, ctx.currentTime); master.gain.linearRampToValueAtTime(.9, ctx.currentTime + 2.5);
+      timer = setInterval(tick, 90); tick();
+    } catch (e) { ctx = null; }
+  }
+  function toggle() {
+    if (!ctx) return on;
+    on = !on;
+    if (on) { ctx.resume().then(() => master.gain.setTargetAtTime(.9, ctx.currentTime, .3)); }
+    else { master.gain.setTargetAtTime(0, ctx.currentTime, .12); setTimeout(() => { if (!on) ctx.suspend(); }, 600); }
+    return on;
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!ctx) return;
+    if (document.hidden) ctx.suspend(); else if (on) ctx.resume();
+  });
+  return { start, toggle, state: () => ctx ? ctx.state : 'none' };
+})();
+
+const muteBtn = $('#mute');
+muteBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  const on = Music.toggle();
+  muteBtn.classList.toggle('off', !on);
+  muteBtn.setAttribute('aria-pressed', String(!on));
+  muteBtn.setAttribute('aria-label', on ? 'Tắt nhạc' : 'Bật nhạc');
+});
+
+/* =====================================================================
+   CHUYỂN CẢNH
+   ===================================================================== */
+let stage = 'intro', cur = null;
+function show(sel) {
+  const next = $(sel), tl = gsap.timeline();
+  if (cur && cur !== next) tl.to(cur, { autoAlpha: 0, y: -18, duration: .45, ease: 'power2.in' });
+  tl.fromTo(next, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: .7, ease: 'power2.out' });
+  cur = next;
+  return tl;
+}
+
+/* ---------- Cảnh 1 + 2: phong bì ---------- */
+gsap.set('.flap', { transformOrigin: '50% 0%', transformPerspective: 700 });
+const pulse = gsap.timeline({ paused: true, repeat: -1, repeatDelay: .75 })
+  .to('.env-in', { scale: 1.045, duration: .13, ease: 'power2.out' })
+  .to('.env-in', { scale: 1, duration: .2, ease: 'power2.in' })
+  .to('.env-in', { scale: 1.03, duration: .12, ease: 'power2.out' })
+  .to('.env-in', { scale: 1, duration: .35, ease: 'power2.inOut' });
+
+const openTl = gsap.timeline({ paused: true, onComplete: () => { stage = 'opened'; } })
+  .addLabel('go')
+  .to('#tIntro', { autoAlpha: 0, y: -14, duration: .5, ease: 'power2.in' }, 'go')
+  .to('#h1a', { autoAlpha: 0, duration: .3 }, 'go')
+  .to('.seal', { scale: 1.18, duration: .16, ease: 'power2.out' }, 'go+=.1')
+  .to('.seal', { scale: .5, y: 34, rotation: -28, autoAlpha: 0, duration: .45, ease: 'power2.in' })
+  .addLabel('flap', '-=.12')
+  .to('.flap', { rotationX: 180, duration: .9, ease: 'power2.inOut' }, 'flap')
+  .set('.flap', { zIndex: 1 }, 'flap+=.45')
+  .to('#env', { y: 64, duration: 1, ease: 'power2.inOut' }, 'flap+=.3')
+  .to('.letter', { y: -128, duration: 1.15, ease: 'power3.out' }, 'flap+=.7')
+  .add(() => {
+    const r = $('#env').getBoundingClientRect();
+    FX.burst(r.left + r.width / 2, r.top + 30, 38);
+    FX.ambient(true);
+  }, 'flap+=.85')
+  .to('#h1b', { autoAlpha: 1, duration: .6 }, '+=.5');
+
+function openEnvelope() {
+  stage = 'opening';
+  Music.start();
+  gsap.to(muteBtn, { autoAlpha: 1, duration: .6, delay: .6 });
+  pulse.pause();
+  gsap.to('.env-in', { scale: 1, duration: .15, overwrite: 'auto' });
+  openTl.play(0);
+}
+$('#s1').addEventListener('click', () => {
+  if (stage === 'intro') openEnvelope();
+  else if (stage === 'opened') goCount();
+});
+$('#env').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && stage === 'intro') { e.preventDefault(); openEnvelope(); } });
+
+/* ---------- Cảnh 3: bộ đếm ---------- */
+const pad = n => String(n).padStart(2, '0');
+function elapsed() {
+  const ms = Math.max(0, Date.now() - START);
+  return { d: Math.floor(ms / DAY), h: Math.floor(ms % DAY / 36e5), m: Math.floor(ms % 36e5 / 6e4), s: Math.floor(ms % 6e4 / 1e3) };
+}
+function tickClock() {
+  const e = elapsed();
+  $('#cD').textContent = e.d; $('#cH').textContent = pad(e.h); $('#cM').textContent = pad(e.m); $('#cS').textContent = pad(e.s);
+}
+function untilText() {
+  const now = Date.now();
+  return now < MILE ? CONTENT.untilBefore.replace('{n}', Math.ceil((MILE - now) / DAY)) : CONTENT.untilAfter;
+}
+setInterval(tickClock, 1000); tickClock();
+
+let countTl = null;
+function goCount() {
+  stage = 'count';
+  if (countTl) countTl.kill();
+  const target = elapsed().d, o = { v: 0 }, daysEl = $('#days');
+  daysEl.textContent = RM ? target : '0';
+  $('#until').textContent = untilText();
+  gsap.set('#cover', { clearProps: 'all' });
+  gsap.set(['#clock > div', '#until', '#h3'], { autoAlpha: 0 });
+  countTl = gsap.timeline({ onComplete: () => { stage = 'counted'; } })
+    .add(show('#s3'))
+    .fromTo('.bloc', { y: -30, rotation: -4 }, { y: 0, rotation: 0, duration: .8, ease: 'back.out(1.5)' }, '<.2')
+    .to('#cover', { rotation: 16, x: 50, y: innerHeight, duration: 1.3, ease: 'power2.in' }, '+=.45')
+    .to('#cover', { autoAlpha: 0, duration: .35 }, '-=.35')
+    .to(o, { v: target, duration: RM ? 0 : 2, ease: 'power2.out', onUpdate: () => { daysEl.textContent = Math.round(o.v); } }, '-=1')
+    .fromTo('#clock > div', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, stagger: .08, duration: .5, ease: 'power2.out' }, '-=.6')
+    .fromTo('#until', { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .6 })
+    .to('#h3', { autoAlpha: 1, duration: .5 }, '+=.3');
+}
+$('#s3').addEventListener('click', () => { if (stage === 'counted') goTimeline(); });
+
+/* ---------- Cảnh 4: timeline 4 tháng ---------- */
+let ci = 0, cw = 280;
+const GAP = 18;
+const setX = gsap.quickSetter(track, 'x', 'px');
+const xFor = i => (innerWidth - cw) / 2 - i * (cw + GAP);
+function layoutCards() {
+  cw = Math.round(Math.min(innerWidth * .76, 290));
+  cards.forEach(c => c.style.setProperty('--cw', cw + 'px'));
+  gsap.set(track, { x: xFor(ci) });
+}
+addEventListener('resize', () => { if (stage === 'timeline') layoutCards(); });
+function setCard(i, instant) {
+  ci = i;
+  const d = instant ? 0 : .55;
+  cards.forEach((c, j) => gsap.to(c, { scale: j === i ? 1 : .88, autoAlpha: j === i ? 1 : .45, rotation: j === i ? 0 : (j < i ? -4 : 4), duration: d, ease: 'power3.out', overwrite: 'auto' }));
+  gsap.to(track, { x: xFor(i), duration: instant ? 0 : .6, ease: 'power3.out', overwrite: 'auto' });
+  gsap.fromTo(cards[i].querySelector('.c-art'), { scale: .8, rotation: -8, opacity: .2 }, { scale: 1, rotation: 0, opacity: 1, duration: RM ? .2 : .9, ease: 'back.out(1.7)', delay: instant ? .5 : .1 });
+  dots.forEach((dd, j) => dd.classList.toggle('on', j === i));
+  const last = i === cards.length - 1;
+  gsap.to('#toLetter', { autoAlpha: last ? 1 : 0, y: last ? 0 : 10, duration: .4 });
+  gsap.to('#h4', { autoAlpha: last ? 0 : 1, duration: .4 });
+}
+function goTimeline() {
+  stage = 'timeline';
+  FX.ambient(false);
+  layoutCards();
+  gsap.set('#h4', { autoAlpha: 0 });
+  setCard(0, true);
+  show('#s4').fromTo('#vp', { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .8, ease: 'power3.out' }, '-=.3');
+}
+(() => {
+  const vp = $('#vp');
+  let down = false, sx = 0, st = 0, base = 0, dx = 0;
+  vp.addEventListener('pointerdown', e => {
+    if (stage !== 'timeline') return;
+    down = true; sx = e.clientX; st = performance.now(); dx = 0;
+    base = gsap.getProperty(track, 'x'); gsap.killTweensOf(track);
+    try { vp.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  vp.addEventListener('pointermove', e => {
+    if (!down) return;
+    dx = e.clientX - sx;
+    let x = base + dx; const max = xFor(0), min = xFor(cards.length - 1);
+    if (x > max) x = max + (x - max) * .35; else if (x < min) x = min + (x - min) * .35;
+    setX(x);
+  });
+  const end = (e, cancelled) => {
+    if (!down) return; down = false;
+    const quick = performance.now() - st < 260;
+    let i = ci;
+    if (Math.abs(dx) > 45 || (Math.abs(dx) > 18 && quick)) i += dx < 0 ? 1 : -1;
+    else if (!cancelled && Math.abs(dx) < 8) i += e.clientX < innerWidth * .3 ? -1 : 1;
+    setCard(Math.max(0, Math.min(cards.length - 1, i)));
+  };
+  vp.addEventListener('pointerup', e => end(e, false));
+  vp.addEventListener('pointercancel', e => end(e, true));
+})();
+$('#toLetter').addEventListener('click', () => { if (stage === 'timeline') goLetter(); });
+
+/* ---------- Cảnh 5: thư viết tay ---------- */
+const lt = $('#lt'), scroller = $('#pscroll');
+let chars = [], times = [], tops = [], writeTl = null;
+function buildLetter() {
+  lt.textContent = ''; chars = []; times = [];
+  let tt = 0;
+  CONTENT.letter.forEach(([cls, text]) => {
+    const p = document.createElement('p'); if (cls) p.className = cls;
+    const words = text.normalize('NFC').split(' ');
+    words.forEach((w, wi) => {
+      const ws = document.createElement('span'); ws.className = 'w';
+      for (const ch of Array.from(w)) {
+        const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; ws.appendChild(s);
+        chars.push(s); times.push(tt);
+        tt += .031;
+        if ('.!?'.includes(ch)) tt += .38; else if (',:;'.includes(ch)) tt += .16;
+      }
+      p.appendChild(ws);
+      if (wi < words.length - 1) { p.appendChild(document.createTextNode(' ')); tt += .02; }
+    });
+    lt.appendChild(p);
+    tt += .45;
+  });
+}
+buildLetter();
+function measure() { tops = chars.map(c => c.offsetTop); }
+
+function finishWriting() {
+  stage = 'written';
+  gsap.to('#h5', { autoAlpha: 0, duration: .3 });
+  gsap.fromTo('#done', { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .5, delay: .3 });
+}
+function goLetter() {
+  stage = 'writing';
+  FX.ambient(false);
+  scroller.scrollTop = 0;
+  gsap.set('#done', { autoAlpha: 0 });
+  gsap.set(chars, { opacity: 0, y: 4 });
+  const tl = show('#s5');
+  if (RM) {
+    tl.to(chars, { opacity: 1, y: 0, duration: .6 }).add(finishWriting);
+    return;
+  }
+  tl.to('#h5', { autoAlpha: 1, duration: .5 });
+  measure();
+  let j = 0, lastCheck = -99;
+  writeTl = gsap.timeline({ paused: true, onComplete: finishWriting, onUpdate() {
+    const now = this.time();
+    while (j < times.length && times[j] <= now) j++;
+    if (j - lastCheck < 6 || !j) return;
+    lastCheck = j;
+    const top = tops[j - 1], h = scroller.clientHeight;
+    if (top + 50 > scroller.scrollTop + h) gsap.to(scroller, { scrollTop: top - h * .4, duration: .9, ease: 'power2.inOut', overwrite: true });
+  } });
+  writeTl.to(chars, { opacity: 1, y: 0, duration: .32, ease: 'power1.out', stagger: i => times[i] });
+  tl.add(() => writeTl.play(0), '-=.2');
+}
+$('#s5').addEventListener('click', e => {
+  if (stage !== 'writing' || !writeTl || e.target.closest('#done')) return;
+  if (writeTl.timeScale() < 3) writeTl.timeScale(5); else writeTl.progress(1);
+});
+$('#done').addEventListener('click', e => { e.stopPropagation(); if (stage === 'written') goEnd(); });
+
+/* ---------- Cảnh 6: pháo hoa + lời kết ---------- */
+let heartLoop = null;
+function goEnd() {
+  stage = 'end';
+  gsap.set('.row .btn', { autoAlpha: 0 });
+  show('#s6')
+    .fromTo('#love', { autoAlpha: 0, scale: .7, y: 20 }, { autoAlpha: 1, scale: 1, y: 0, duration: 1.2, ease: 'back.out(1.6)' }, '-=.2')
+    .add(() => FX.fireworks(9), '<')
+    .fromTo('.row .btn', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .12, duration: .5 }, '+=1.2');
+  if (!RM) {
+    if (heartLoop) heartLoop.kill();
+    heartLoop = gsap.timeline({ repeat: -1, repeatDelay: .7, delay: 1.2 })
+      .to(heartSpan, { scale: 1.25, duration: .13, ease: 'power2.out' })
+      .to(heartSpan, { scale: 1, duration: .2, ease: 'power2.in' })
+      .to(heartSpan, { scale: 1.15, duration: .12, ease: 'power2.out' })
+      .to(heartSpan, { scale: 1, duration: .35 });
+  }
+}
+$('#reread').addEventListener('click', () => {
+  if (stage !== 'end') return;
+  stage = 'written';
+  FX.stopFireworks();
+  scroller.scrollTop = 0;
+  gsap.set(chars, { opacity: 1, y: 0 });
+  gsap.set('#h5', { autoAlpha: 0 });
+  show('#s5').fromTo('#done', { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 });
+});
+$('#restart').addEventListener('click', () => {
+  if (stage !== 'end') return;
+  FX.stopFireworks(); FX.ambient(false);
+  if (heartLoop) heartLoop.kill(); gsap.set(heartSpan, { scale: 1 });
+  if (writeTl) { writeTl.kill(); writeTl = null; }
+  if (countTl) { countTl.kill(); countTl = null; }
+  ci = 0;
+  openTl.pause(0);
+  gsap.set(['#h1b', '#h3', '#h4', '#h5', '#done', '#toLetter'], { autoAlpha: 0 });
+  stage = 'intro';
+  show('#s1').add(() => { if (!RM) pulse.restart(); });
+});
+
+/* ---------- mở đầu ---------- */
+function intro() {
+  cur = $('#s1');
+  gsap.timeline({ delay: .15 })
+    .set('#s1', { autoAlpha: 1 })
+    .fromTo('#tIntro', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' })
+    .fromTo('#env', { autoAlpha: 0, y: 24, scale: .92 }, { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' }, '-=.6')
+    .to('#h1a', { autoAlpha: 1, duration: .6 }, '-=.2')
+    .add(() => { if (!RM) pulse.play(); });
+}
+let started = false;
+const go = () => { if (!started) { started = true; intro(); } };
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+setTimeout(go, 1500);
+})();
+</script>
+</body>
+</html>
